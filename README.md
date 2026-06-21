@@ -1,4 +1,4 @@
-## operations-workflow-automation
+## Operations-workflow-automation
 Built an automated workflow to manage call forwarding requests using Notion, n8n, Tally, and Telegram.
 
 ## Problem
