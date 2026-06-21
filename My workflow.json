@@ -1,0 +1,359 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "1864527e-52b4-4c41-b41c-8fe706ce35a5",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        -592
+      ],
+      "id": "0330158d-e470-449f-b885-949dc73fa8a1",
+      "name": "Webhook",
+      "webhookId": "1864527e-52b4-4c41-b41c-8fe706ce35a5"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "321dc422-c3ff-8027-ab45-f8b1812fde04",
+          "mode": "list",
+          "cachedResultName": "Call Forwarding Dashboard - Operations",
+          "cachedResultUrl": "https://app.notion.com/p/321dc422c3ff8027ab45f8b1812fde04"
+        },
+        "title": "Forwarding Task",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Created By|select",
+              "selectValue": "={{ $json['Created By'] }}"
+            },
+            {
+              "key": "PPC|title",
+              "title": "={{ $json.PPC }}"
+            },
+            {
+              "key": "Language|select",
+              "selectValue": "={{ $json.Language }}"
+            },
+            {
+              "key": "Product|rich_text",
+              "textContent": "={{ $json.Product }}"
+            },
+            {
+              "key": "Centre|select",
+              "selectValue": "={{ $json.Centre }}"
+            },
+            {
+              "key": "Time|date",
+              "date": "={{ $json.Time }}",
+              "timezone": "Asia/Kolkata"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        -592
+      ],
+      "id": "9eba3a11-9eb0-4ae0-8b62-32e3871de498",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "P5XEHHvW94cBSLfV",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "52eccbed-b531-4d83-b55f-5dc7e02718a8",
+              "name": "Created By",
+              "value": "={{\n$json.body.data.fields[0].options.find(\no => o.id === $json.body.data.fields[0].value[0]\n).text\n}}",
+              "type": "string"
+            },
+            {
+              "id": "48eeaf11-6c8f-45de-a662-f8abbccc814f",
+              "name": "PPC",
+              "value": "={{ $json.body.data.fields[1].value}}",
+              "type": "string"
+            },
+            {
+              "id": "bf1e5e2d-3342-443a-87f4-6d4b52a956b0",
+              "name": "Language",
+              "value": "={{ $json.body.data.fields[2].options.find( o => o.id === $json.body.data.fields[2].value[0] ).text }}",
+              "type": "string"
+            },
+            {
+              "id": "2d22bceb-ca8b-42e8-9259-0b695e115e1f",
+              "name": "Product",
+              "value": "={{ $json.body.data.fields[3].value}}",
+              "type": "string"
+            },
+            {
+              "id": "853a05fb-a567-41ef-9db5-c267fa88aa31",
+              "name": "Centre",
+              "value": "={{ $json.body.data.fields[4].options.find( o => o.id === $json.body.data.fields[4].value[0] ).text }}",
+              "type": "string"
+            },
+            {
+              "id": "a2544b49-5aa2-4b77-ba1d-f5e9c1012e8e",
+              "name": "Time",
+              "value": "={{ $json.body.data.fields[5].value + \"T\" + $json.body.data.fields[6].value + \":00\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        -592
+      ],
+      "id": "479e85b6-faab-4a85-98fa-4a4a0a8a2b87",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resume": "specificTime",
+        "dateTime": "={{ $json.property_time.start }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -592
+      ],
+      "id": "1774fa20-1094-4d38-9d75-530ba8cc494b",
+      "name": "Wait",
+      "webhookId": "09f6c818-2932-446b-9bb3-ed35020eae03"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "get",
+        "pageId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}",
+          "__regex": "^([0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12})"
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        -592
+      ],
+      "id": "ef5c11c9-98a8-44b8-9de2-221d0287e859",
+      "name": "Get a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "P5XEHHvW94cBSLfV",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "602d107f-5df0-4618-9dd5-815ce6a46590",
+              "leftValue": "={{ $json.property_sent }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        -592
+      ],
+      "id": "64e9a42b-4ef1-4d90-9d62-2b969628df8c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "8222290757",
+        "text": "={{ $json.property_message.replaceAll('_', '_')}}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        -608
+      ],
+      "id": "44d79529-e3e5-4e83-9f39-d290dd9ae760",
+      "name": "Send a text message",
+      "webhookId": "d4b2ea4a-6a1c-4d1a-92bb-02b14ae0a2df",
+      "credentials": {
+        "telegramApi": {
+          "id": "s5XNxEoMTdJRgYGk",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "update",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $('Get a database page').item.json.id }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Sent ?|checkbox",
+              "checkboxValue": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        -608
+      ],
+      "id": "6fb6a793-224e-4b99-848e-15fa5add3508",
+      "name": "Update a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "P5XEHHvW94cBSLfV",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a database page": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Update a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "d0b99574-3e2c-42a4-b36d-ec92ec5a3221",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2a53628009fe944f5b62f45ccec006e446d6ae3767a9b3c920e00d25dc211104"
+  },
+  "nodeGroups": [],
+  "id": "3C4EnBv8QZhwE79R",
+  "tags": []
+}
